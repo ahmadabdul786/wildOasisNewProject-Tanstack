@@ -1,42 +1,135 @@
-import { useEffect, useState } from "react";
-import getCabins from "../services/apiCabins";
-import { data } from "react-router-dom";
+
+// import getCabins, { deleteCabin } from "../services/apiCabins";
+// import { data } from "react-router-dom";
 import CabinTable from "../features/cabins/CabinTable";
 
+// import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+// import toast from "react-hot-toast";
+import { useState } from "react";
+import CreateCabinForm from "../features/cabins/CreateCabinForm";
+import useDeleteCabin from "../features/cabins/useDeleteCabin";
+import useCabins from "../features/cabins/useCabins";
+import cabinColumns from "../features/cabins/CabinColumns";
+
+
+  
+  
+
 function Cabins() {
+  const [showForm,setShowForm] = useState(false);
+  const [showEditForm,setShowEditForm] = useState(false);
+  const [editCabinData, setEditCabinData] = useState(null);
+  const {data,error,isLoading} =  useCabins();
+       const {isDeleting,deleteCabinMutation} = useDeleteCabin();
+  const columns = cabinColumns(setEditCabinData,setShowEditForm,deleteCabinMutation,isDeleting);
   
-  
-  // useEffect(()=>{
-  //   getCabins().then((data=>console.log(data)));  
-  // },[])
  
+ 
+     
+  // console.log(error, 'error');
+  //  const tableData = data || [];
+     //console.log(data, 'data');
+    //  console.log(editCabinData);
 
-  useEffect(()=>{
-    async function fetchData() {
-    const res=  await fetch(`https://transit.land/api/v2/rest/operators?api_key=HGgNd0mYjI1l70NRbi0tXdH0eqGHpnhx`)
-  const data = await res.json();
-  console.log(data);  
+     
+   
   
-  }
-fetchData();
-  },[])
+  //this use effect is used to set the params and this will set the params and fromthere
+  //we can take the query and send it to backend req and we will again get the get 
+  //and we will show the sorted array
+
+  
+
     
-
+     
+  
+   
+  if(isLoading) return <p>loading...</p>
   return (
-
-    <div >
+<>
+ <div className="bg-red-200">
       <h1>All cabins</h1>
-      
-      <CabinTable/>
-    </div>
+   <CabinTable data={data} columns={columns}/>
+    <button onClick={()=>setShowForm((prev)=>!prev)}>
+      {showForm ? 'Hide Form' : 'Add Cabin'}
+    </button>
+     {showForm && <CreateCabinForm setShowForm = {setShowForm} />}
+     {showEditForm && <CreateCabinForm editCabinData = {editCabinData} setShowEditForm = {setShowEditForm} />}
+       </div>
+    
+    </>
   );
 }
 
 export default Cabins;
 
+//here the snapshot of very simple tanstack table 
+
+//     const columnHelper = createColumnHelper();
+    
+//     const columns = [
+//       columnHelper.accessor('discount',{
+//         header:'Discount'
+//       }),
+//       columnHelper.accessor('name',{
+//         header:'Name'
+//       }),
+//       columnHelper.accessor('regularPrice',{
+//         header:'Pirce'
+//       })
+
+//     ]
+//    const table = useReactTable({
+//     data,
+//     columns,
+//     getCoreRowModel: getCoreRowModel()
+//    })
+//    console.log(table);
+//   if(isLoading) return <p>loading...</p>
+//   return (
+// <>
+// {/* <CabinTable/> */}
+//     <div >
+//       <h1>All cabins</h1>
+      
+//       <table>
+//         <thead>
+//           {table.getHeaderGroups().map((headerGroup)=>{
+//           return <tr key={headerGroup.id}>
+//             {headerGroup.headers.map((header)=><th key={header.id}>
+//               {flexRender(header.column.columnDef.header,header.getContext())}
+              
+//             </th>)}
+            
+//           </tr>
+//           })}
+          
+//         </thead>
+//         <tbody>
+//           {table.getRowModel().rows?.length? 
+//           table.getRowModel().rows.map((row)=>{
+//             return<tr key={row.id}>
+             
+//              {row.getVisibleCells().map((cell)=><td>{
+//               flexRender(cell.column.columnDef.cell,cell.getContext())
+//               }</td>)}
+              
+//             </tr>
+//           }):<tr>no results</tr>}
+          
+//         </tbody>
+//       </table> 
+//     </div>
+//     </>
+//   );
+// }
+
+// export default Cabins;
+   
 
 
-        
+//this code was written in your first assessment with sir tayyab 
       {/*
         
 <form onSubmit={handleSubmit}> 
@@ -59,6 +152,8 @@ author_key,
           </p>
         </div>
       })} */}
+
+
 
 
 

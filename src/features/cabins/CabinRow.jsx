@@ -40,8 +40,8 @@ const Discount = styled.div`
 `;
 export default function CabinRow({cabin}){
   const {name,maxCapacity,regularPrice,discount,image} = cabin;
-  return<tr className="bg-amber-50  grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] items-center gap-1">
-    <td>
+  return<tr className="bg-amber-50 my-2  grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] items-center gap-1">
+    <td className="">
     <img className=" object-fit  " src={image} />
     </td>
     <td>

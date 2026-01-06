@@ -12,6 +12,7 @@ import PageNotFound from './pages/PageNotFound'
 import AppLayout from './ui/AppLayout'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Toaster } from 'react-hot-toast'
 
 // <div className='grid grid-cols-[26rem_1fr] grid-rows-[auto_1fr] h-screen  '>
 //       <header className=' bg-gray-100'>header</header>
@@ -50,9 +51,29 @@ export default function App() {
       <Route path='login' element = {<Login/>} />
       <Route path='*' element = {<PageNotFound/>} />
 
-
+    
     </Routes>
     </BrowserRouter>
+    <Toaster position='top-left' 
+    gutter={12} // this is the gap between toast and window edge
+    containerStyle={{margin:'8px'}}
+     toastOptions={{
+      success:{
+        duration:3000
+      },
+      error:{
+        duration:2000
+      },
+      style:{
+        fontSize:'16px',
+        maxWidth:"500px",
+        padding:'16px 24px',
+        backgroundColor:'skyblue',
+        color:'white'
+
+      }
+     }}
+     />
     </QueryClientProvider>
   )
 }

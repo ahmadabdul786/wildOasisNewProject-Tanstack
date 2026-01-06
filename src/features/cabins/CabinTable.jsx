@@ -1,55 +1,158 @@
-import { useQuery } from "@tanstack/react-query";
-import styled from "styled-components";
-import getCabins from "../../services/apiCabins";
-import Spinner from "../../ui/Spinner";
-import CabinRow from "./CabinRow";
+// // 
+// import { flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+// import React, { useEffect, useState } from 'react'
+// import { useSearchParams } from 'react-router-dom';
 
-const Table = styled.div`
-  border: 1px solid var(--color-grey-200);
-
-  font-size: 1.4rem;
-  background-color: var(--color-grey-0);
-  border-radius: 7px;
-  overflow: hidden;
-`;
-
-const TableHeader = styled.header`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-
-  background-color: var(--color-grey-50);
-  border-bottom: 1px solid var(--color-grey-100);
-  text-transform: uppercase;
-  letter-spacing: 0.4px;
-  font-weight: 600;
-  color: var(--color-grey-600);
-  padding: 1.6rem 2.4rem;
-`;
-export default function CabinTable(){
+// function CabinTable({data,columns}) {
   
-  const {data:cabins,error,isLoading} =  useQuery({
-    queryKey:['cabin'],
-    queryFn:getCabins
-   })
+//     const [sorting,setSorting] = useState([]);
+//     const [seachParams,setSearchParams] = useSearchParams();
+//   useEffect(()=>{
+//      if(sorting.length>0){
+//       const {id,desc} = sorting[0];
+//       setSearchParams({sort:`${id}:${desc?'desc':'asc'}`});
+      
+//      }
+//      else{
+//         const obj = Object.fromEntries(seachParams);
+//         delete obj.sort;
+//         setSearchParams(obj);
+//       }
+//     },[sorting])
 
-  if(isLoading) return <Spinner/>
-  return<table className="flex w-full  flex-col  ">
-    <thead className="bg-stone-100 flex justify-center">
-    <tr className=" w-full " >
-      <th className="grid grid-cols-[0.6fr_1.8fr_2.2fr_1fr_1fr_1fr] items-center gap-1">
-        <div>abc</div>
-        <div >Cabin</div>
-        <div>Capacity</div>
-        <div>Price</div>
-        <div>Discount</div>
-        <div>abc</div>
-      </th>
-    </tr>
-    </thead>
-    <tbody>
-    {cabins.map((cabin)=><CabinRow cabin={cabin} key={cabin.id}/>)}
-    </tbody>
-  </table>
+//   const table = useReactTable({
+//     data,
+//     columns,
+//     getCoreRowModel: getCoreRowModel(),
+    
+//     onSortingChange:setSorting,
+//     state:{
+//       sorting
+//     }
+//    })
+//    console.log(table);
+
+//   return (
+    
+//       <table className='w-full'>
+//         <thead className='w-full ' >
+//           {table.getHeaderGroups().map((headerGroup)=>{
+//           return <tr className=' bg-amber-500 w-full ' key={headerGroup.id}>
+//             {headerGroup.headers.map((header)=><th key={header.id} onClick={header.column.getToggleSortingHandler()}>
+//               {header.isPlaceholder? null:
+//                flexRender(header.column.columnDef.header,
+//                 header.getContext())
+//                 }
+//                 {{asc:'👆',desc:'👇'}[header.column.getIsSorted()]}
+
+              
+//             </th>)}
+            
+//           </tr>
+//           })}
+          
+//         </thead>
+//         <tbody className='w-full pl-4'>
+//           {table.getRowModel().rows?.length? 
+//           table.getRowModel().rows.map((row)=>{
+//             return<tr className=' w-full bg-amber-100' key={row.id}>
+             
+//              {row.getVisibleCells().map((cell)=><td>{
+//               flexRender(cell.column.columnDef.cell,cell.getContext())
+//               }</td>)}
+              
+//             </tr>
+//           }):<tr>no results</tr>}
+          
+//         </tbody>
+//       </table>
+    
+//   )
+// }
+
+// export default CabinTable
+
+import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import React, { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
+function CabinTable({ data, columns }) {
+  const [sorting, setSorting] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (sorting.length > 0) {
+      const { id, desc } = sorting[0];
+      setSearchParams({ sort: `${id}:${desc ? 'desc' : 'asc'}` });
+    } else {
+      const obj = Object.fromEntries(searchParams);
+      delete obj.sort;
+      setSearchParams(obj);
+    }
+  }, [sorting]);
+
+  const table = useReactTable({
+    data,
+    columns,
+    state: { sorting },
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(), // Required for sorting to actually move rows
+  });
+
+  return (
+    <div className="overflow-x-auto border border-gray-200 rounded-lg">
+      <table className="w-full text-left border-collapse">
+        <thead className="bg-amber-500 text-white">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="px-4 py-3 font-semibold cursor-pointer select-none border-b border-amber-600"
+                  onClick={header.column.getToggleSortingHandler()}
+                >
+                  <div className="flex items-center gap-2">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(header.column.columnDef.header, header.getContext())}
+                    
+                    {/* Sort Icons */}
+                    <span className="w-4">
+                      {{
+                        asc: ' 👆',
+                        desc: ' 👇',
+                      }[header.column.getIsSorted()] ?? ' ↕️'}
+                    </span>
+                  </div>
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+
+        <tbody className="divide-y divide-gray-200">
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <tr key={row.id} className="hover:bg-amber-50 transition-colors">
+                {row.getVisibleCells().map((cell) => (
+                  <td key={cell.id} className="px-4 py-3 text-sm text-gray-700">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columns.length} className="px-4 py-10 text-center text-gray-500">
+                No results found.
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
 }
+
+export default CabinTable;

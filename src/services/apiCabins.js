@@ -1,7 +1,7 @@
 import supabase, { supabaseUrl } from "./supabase"
 
 export default async function getCabins(){
-    
+    console.log('abc');
 let { data, error } = await supabase
   .from('cabins')
   .select('*')
@@ -13,6 +13,8 @@ if(error){
     throw new Error('cabin could not found ');
 
 }
+
+
 return  data;
 
 }

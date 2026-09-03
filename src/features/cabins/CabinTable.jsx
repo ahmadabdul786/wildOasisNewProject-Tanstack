@@ -72,87 +72,13 @@
 
 // export default CabinTable
 
-import { flexRender, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
-import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React from 'react'
+import Table from '../../ui/Table'
 
-function CabinTable({ data, columns }) {
-  const [sorting, setSorting] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    if (sorting.length > 0) {
-      const { id, desc } = sorting[0];
-      setSearchParams({ sort: `${id}:${desc ? 'desc' : 'asc'}` });
-    } else {
-      const obj = Object.fromEntries(searchParams);
-      delete obj.sort;
-      setSearchParams(obj);
-    }
-  }, [sorting]);
-
-  const table = useReactTable({
-    data,
-    columns,
-    state: { sorting },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(), // Required for sorting to actually move rows
-  });
-
+function CabinTable({data,columns}) {
   return (
-    <div className="overflow-x-auto border border-gray-200 rounded-lg">
-      <table className="w-full text-left border-collapse">
-        <thead className="bg-amber-500 text-white">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <th
-                  key={header.id}
-                  className="px-4 py-3 font-semibold cursor-pointer select-none border-b border-amber-600"
-                  onClick={header.column.getToggleSortingHandler()}
-                >
-                  <div className="flex items-center gap-2">
-                    {header.isPlaceholder
-                      ? null
-                      : flexRender(header.column.columnDef.header, header.getContext())}
-                    
-                    {/* Sort Icons */}
-                    <span className="w-4">
-                      {{
-                        asc: ' 👆',
-                        desc: ' 👇',
-                      }[header.column.getIsSorted()] ?? ' ↕️'}
-                    </span>
-                  </div>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-
-        <tbody className="divide-y divide-gray-200">
-          {table.getRowModel().rows?.length ? (
-            table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="hover:bg-amber-50 transition-colors">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-3 text-sm text-gray-700">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={columns.length} className="px-4 py-10 text-center text-gray-500">
-                No results found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  );
+    <Table data={data} columns={columns} />
+  )
 }
 
-export default CabinTable;
+export default CabinTable

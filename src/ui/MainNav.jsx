@@ -1,8 +1,6 @@
 import styled from "styled-components";
-import { HiHome } from "react-icons/hi2";
-import { HiHomeModern } from "react-icons/hi2";
 
-import { HiOutlineCalendarDays } from "react-icons/hi2";
+import { HiOutlineCalendarDays,HiMiniUsers,HiHomeModern,HiHome,HiMiniCog8Tooth } from "react-icons/hi2";
 
 const NavList = styled.ul`
   display: flex;
@@ -75,6 +73,20 @@ export default function MainNav() {
        <HiHomeModern />
 
       cabins
+      </NavLink>
+    </li>
+    <li className="p-3 hover:bg-stone-300 font-bold">
+      <NavLink className='flex items-center gap-1' to = 'users'>
+        <HiMiniUsers />
+
+      Users
+      </NavLink>
+    </li>
+    <li className="p-3 hover:bg-stone-300 font-bold">
+      <NavLink className='flex items-center gap-1' to = 'settings'>
+        <HiMiniCog8Tooth />
+
+      Settings
       </NavLink>
     </li>
    </ul>

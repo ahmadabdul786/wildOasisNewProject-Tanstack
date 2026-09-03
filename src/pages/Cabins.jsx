@@ -6,11 +6,13 @@ import CabinTable from "../features/cabins/CabinTable";
 // import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 // import toast from "react-hot-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateCabinForm from "../features/cabins/CreateCabinForm";
 import useDeleteCabin from "../features/cabins/useDeleteCabin";
 import useCabins from "../features/cabins/useCabins";
 import cabinColumns from "../features/cabins/CabinColumns";
+import CabinTableOperation from "../features/cabins/CabinTableOperation";
+import {  useSearchParams } from "react-router-dom";
 
 
   
@@ -20,7 +22,7 @@ function Cabins() {
   const [showForm,setShowForm] = useState(false);
   const [showEditForm,setShowEditForm] = useState(false);
   const [editCabinData, setEditCabinData] = useState(null);
-  const {data,error,isLoading} =  useCabins();
+  const {data,isLoading} =  useCabins();
        const {isDeleting,deleteCabinMutation} = useDeleteCabin();
   const columns = cabinColumns(setEditCabinData,setShowEditForm,deleteCabinMutation,isDeleting);
   
@@ -38,19 +40,52 @@ function Cabins() {
   //this use effect is used to set the params and this will set the params and fromthere
   //we can take the query and send it to backend req and we will again get the get 
   //and we will show the sorted array
-
+ console.log(data);
   
+ const [searchParams] = useSearchParams();
 
+ const discountFilter = searchParams.get('discount') ||'All';
+
+//  useEffect(()=>{
+// console.log(searchParams);
+//  },[searchParams])
+
+
+ let filteredData ;
+ let sortedCabin ;
+ if(discountFilter ==='All') {
+  filteredData =data;
+ }
+ if(discountFilter ==='With-discount'){
+  filteredData = data.filter((cur)=>cur.discount>0);
+ }
+ if(discountFilter ==='No-discount'){
+  filteredData = data.filter((cur)=>cur.discount==0);
+ }
     
-     
-  
+//  sorting    
+const sortBy = searchParams.get('sortBy') || 'startDate-acs';
+ 
+const[field,direction] = sortBy.split('-');
+   const modifier = direction === 'asc'? 1:-1;
+ console.log(filteredData)
+
+ if(filteredData){
+ sortedCabin =  filteredData.sort((a,b)=>(a[field]-b[field]) *modifier);
+  }
    
   if(isLoading) return <p>loading...</p>
   return (
 <>
- <div className="bg-red-200">
-      <h1>All cabins</h1>
-   <CabinTable data={data} columns={columns}/>
+ <div className="">
+      <div className="flex  w-full items-center justify-between bg-gray-200 h-8 ">
+        <h1>All cabins</h1>
+        
+      <CabinTableOperation/>
+      </div>
+      
+   <CabinTable data={sortedCabin} columns={columns}/>
+
     <button onClick={()=>setShowForm((prev)=>!prev)}>
       {showForm ? 'Hide Form' : 'Add Cabin'}
     </button>

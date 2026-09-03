@@ -13,6 +13,9 @@ import AppLayout from './ui/AppLayout'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
+import Canvas from './pages/Canvas'
+import Booking from './features/bookings/Booking'
+import Checkin from './pages/Checkin'
 
 // <div className='grid grid-cols-[26rem_1fr] grid-rows-[auto_1fr] h-screen  '>
 //       <header className=' bg-gray-100'>header</header>
@@ -42,10 +45,15 @@ export default function App() {
       <Route index element = {<Navigate replace to = 'dashboard'/> }/>
       <Route path='dashboard' element = {<Dashboard/>} />
       <Route path='bookings' element = {<Bookings/>} />
+      <Route path='bookings/:bookingId' element = {<Booking/>} />
+      
+      <Route path='checkin/:bookingId' element = {<Checkin/>} />
+      
       <Route path='cabins' element = {<Cabins/>} />
       <Route path='account' element = {<Account/>} />
       <Route path='users' element = {<NewUsers/>} />
       <Route path='settings' element = {<Settings/>} />
+      <Route path='canvas' element = {<Canvas/>} />
       </Route>
       
       <Route path='login' element = {<Login/>} />

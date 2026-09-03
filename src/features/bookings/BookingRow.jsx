@@ -6,6 +6,8 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import { MenuSub } from "@mantine/core";
+import {  useNavigate } from "react-router-dom";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -53,13 +55,15 @@ function BookingRow({
     "checked-in": "green",
     "checked-out": "silver",
   };
+  const nevigate = useNavigate();
 
   return (
-    <Table.Row>
+    <Table.Row  onClick={() => nevigate(`/bookings/${bookingId}`)}
+  style={{ cursor: "pointer" }} >
       <Cabin>{cabinName}</Cabin>
 
       <Stacked>
-        <span>{guestName}</span>
+        <span  >{guestName}</span>
         <span>{email}</span>
       </Stacked>
 
@@ -79,6 +83,7 @@ function BookingRow({
       <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
+      
     </Table.Row>
   );
 }

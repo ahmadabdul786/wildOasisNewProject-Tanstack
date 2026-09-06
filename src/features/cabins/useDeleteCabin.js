@@ -16,6 +16,9 @@ export default function useDeleteCabin() {
       queryClient.invalidateQueries({
       queryKey:["cabins"]
     })
+    },
+    onError:(error)=>{
+      toast.error(error.message || 'cabin could not be deleted');
     }
    })
    return {isDeleting,deleteCabinMutation};

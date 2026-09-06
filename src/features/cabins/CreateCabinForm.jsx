@@ -187,15 +187,15 @@ function CreateCabinForm({editCabinData = {}, setShowEditForm , setShowForm}) {
 
       {/* Description */}
       <div className={rowStyles}>
-        <label htmlFor="discription" className={labelStyles}>Description for website</label>
+        <label htmlFor="description" className={labelStyles}>Description for website</label>
         <textarea 
-          id="discription" 
+          id="description" 
           defaultValue="" 
           rows="3"
-          {...register("discription",{required:'this field is required'})}
+          {...register("description",{required:'this field is required'})}
           className={`${inputStyles} resize-none`} 
         />
-        {errors?.discription?.message && <span className="text-sm text-red-600">{errors?.discription?.message}</span>}
+        {errors?.description?.message && <span className="text-sm text-red-600">{errors?.description?.message}</span>}
       </div>
 
       {/* File Input */}

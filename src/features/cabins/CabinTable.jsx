@@ -77,7 +77,7 @@ import Table from '../../ui/Table'
 
 function CabinTable({data,columns}) {
   return (
-    <Table data={data} columns={columns} />
+    <Table data={data} columns={columns} OnRowClick={(row)=>console.log(row)} />
   )
 }
 

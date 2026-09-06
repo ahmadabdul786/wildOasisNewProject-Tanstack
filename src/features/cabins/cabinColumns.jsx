@@ -32,8 +32,8 @@ function cabinColumns(setEditCabinData,setShowEditForm,deleteCabinMutation,isDel
       cell: ({ row }) => (
         <button 
           onClick={() => {
-           console.log(row.original.user_id);
-             deleteCabinMutation(row.original.user_id)
+           console.log(row.original.id);
+             deleteCabinMutation(row.original.id)
            
           }} // Call the mutation with the cabin's ID
           disabled={isDeleting}
@@ -43,13 +43,13 @@ function cabinColumns(setEditCabinData,setShowEditForm,deleteCabinMutation,isDel
       ),
     }),
 columnHelper.display({
-      // id: 'user_id',
+      id: 'id',
       header: 'Actions',
       cell: ({ row }) => (
         <button 
           onClick={() => {
            console.log(row.original);
-            //  mutate(row.original.user_id)
+            //  mutate(row.original.id)
             setEditCabinData(row.original);
            setShowEditForm(true);
           }} // Call the mutation with the cabin's ID

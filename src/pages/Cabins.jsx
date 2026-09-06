@@ -23,7 +23,8 @@ function Cabins() {
   const [showEditForm,setShowEditForm] = useState(false);
   const [editCabinData, setEditCabinData] = useState(null);
   const {data,isLoading} =  useCabins();
-       const {isDeleting,deleteCabinMutation} = useDeleteCabin();
+  const {isDeleting,deleteCabinMutation} = useDeleteCabin();
+
   const columns = cabinColumns(setEditCabinData,setShowEditForm,deleteCabinMutation,isDeleting);
   
  
@@ -73,7 +74,7 @@ const[field,direction] = sortBy.split('-');
  if(filteredData){
  sortedCabin =  filteredData.sort((a,b)=>(a[field]-b[field]) *modifier);
   }
-   
+   console.log(sortedCabin);
   if(isLoading) return <p>loading...</p>
   return (
 <>

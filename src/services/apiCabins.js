@@ -25,9 +25,10 @@ export async function createCabin(newCabin){
   // const imageName = `${Date.now()}-${newCabin.image.name}`;
   // https://tmxrivmyvmjtenhoxudm.supabase.co/storage/v1/object/public/cabin-images/cabin-001.jpg
  // https://tmxrivmyvmjtenhoxudm.supabase.co/storage/v1/object/public/cabin-images/cabin-003.jpg
+ //https://sdricjjznnjilwswngpz.storage.supabase.co/storage/v1/s3
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll('/','');
   console.log(imageName,newCabin.image.name);
-  const imagePath = `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
+  const imagePath = `${supabaseUrl}/storage/v1/s3/object/public/cabin-images/${imageName}`;
 const { data, error } = await supabase
   .from('cabins')
   .insert([
@@ -103,7 +104,7 @@ export  async function deleteCabin(id) {
   const { error } = await supabase
   .from('cabins')
   .delete()
-  .eq('user_id', id)
+  .eq('id', id)
 
   if(error){
     console.error(error);

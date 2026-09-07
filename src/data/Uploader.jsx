@@ -46,22 +46,28 @@ async function createBookings() {
     .from("guests")
     .select("id")
     .order("id");
+
   const allGuestIds = guestsIds.map((cabin) => cabin.id);
+  // console.log(allGuestIds)
+
   const { data: cabinsIds } = await supabase
     .from("cabins")
     .select("id")
-    .order("id");
-  const allCabinIds = cabinsIds.map((cabin) => cabin.id);
+     .order("id");
+    // console.log(cabinsIds);
 
+  const allCabinIds = cabinsIds.map((cabin) => cabin.id);
+   console.log(allCabinIds,allGuestIds);
+console.log(bookings);
   const finalBookings = bookings.map((booking) => {
-    // Here relying on the order of cabins, as they don't have and ID yet
+    // Here relying on the order of cabins, as they don't have an ID yet
     const cabin = cabins.at(booking.cabinId - 1);
     const numNights = subtractDates(booking.endDate, booking.startDate);
     const cabinPrice = numNights * (cabin.regularPrice - cabin.discount);
-    const extrasPrice = booking.hasBreakfast
+    const extraPrice = booking.hasBreakfast
       ? numNights * 15 * booking.numGuests
       : 0; // hardcoded breakfast price
-    const totalPrice = cabinPrice + extrasPrice;
+    const totalPrice = cabinPrice + extraPrice;
 
     let status;
     if (
@@ -86,7 +92,7 @@ async function createBookings() {
       ...booking,
       numNights,
       cabinPrice,
-      extrasPrice,
+      extraPrice,
       totalPrice,
       guestId: allGuestIds.at(booking.guestId - 1),
       cabinId: allCabinIds.at(booking.cabinId - 1),
@@ -104,6 +110,7 @@ function Uploader() {
   const [isLoading, setIsLoading] = useState(false);
 
   async function uploadAll() {
+
     setIsLoading(true);
     // Bookings need to be deleted FIRST
     await deleteBookings();

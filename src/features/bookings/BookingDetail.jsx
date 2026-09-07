@@ -1,14 +1,15 @@
 import styled from "styled-components";
 
 import BookingDataBox from "./BookingDataBox";
-import Row from "../../ui/Row";
-import Heading from "../../ui/Heading";
+// import Row from "../../ui/Row";
+// import Heading from "../../ui/Heading";
 import Tag from "../../ui/Tag";
 import ButtonGroup from "../../ui/ButtonGroup";
 import Button from "../../ui/Button";
 import ButtonText from "../../ui/ButtonText";
 
 import { useMoveBack } from "../../hooks/useMoveBack";
+import  { useGetSingleBooking } from "./useGetSingleBooking";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const HeadingGroup = styled.div`
 `;
 
 function BookingDetail() {
-  const booking = {};
+  // const booking = {};
   const status = "checked-in";
 
   const moveBack = useMoveBack();
@@ -27,16 +28,19 @@ function BookingDetail() {
     "checked-in": "green",
     "checked-out": "silver",
   };
+  const { booking, error, isLoading } = useGetSingleBooking();
 
+  console.log(booking);
+  if(isLoading ||  !booking) return <div>loading...</div>
   return (
     <>
-      <Row type="horizontal">
+      <div>
         <HeadingGroup>
-          <Heading as="h1">Booking #X</Heading>
+          <h1>Booking #{booking?.id}</h1>
           <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
         </HeadingGroup>
         <ButtonText onClick={moveBack}>&larr; Back</ButtonText>
-      </Row>
+      </div>
 
       <BookingDataBox booking={booking} />
 
